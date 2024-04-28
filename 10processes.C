@@ -1,4 +1,3 @@
-#!/bin/bash
 
 # Display top 10 processes by CPU usage
 echo "Top 10 processes by CPU usage:"
