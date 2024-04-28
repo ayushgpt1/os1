@@ -5,7 +5,8 @@
 
 // Function to find if a page is present in memory
 int findPage(int page, int *memory, int numFrames) {
-    for (int i = 0; i < numFrames; i++) {
+int i; 
+for (i = 0; i < numFrames; i++) {
         if (memory[i] == page) {
             return 1; // Page found
         }
@@ -26,21 +27,21 @@ int main() {
     int numFrames = 3; // Number of frames in memory
     int pageFaults = 0; // Count of page faults
     int nextIndex = 0; // Index to keep track of the next frame to replace
-
+    int i,j;
     // Initialize memory
-    for (int i = 0; i < numFrames; i++) {
+    for (i = 0; i < numFrames; i++) {
         memory[i] = -1; // -1 indicates an empty frame
     }
 
     // Simulate page replacement
-    for (int i = 0; i < numPages; i++) {
+    for (i = 0; i < numPages; i++) {
         int page = referenceString[i];
         if (!findPage(page, memory, numFrames)) {
             pageFaults++;
             replacePage(page, memory, numFrames, &nextIndex);
         }
         printf("Memory: ");
-        for (int j = 0; j < numFrames; j++) {
+        for (j = 0; j < numFrames; j++) {
             if (memory[j] == -1)
                 printf("Empty ");
             else
