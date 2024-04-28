@@ -5,10 +5,9 @@
 
 // Function to calculate the total head movement
 int calculateTotalHeadMovement(int head, int *requests, int num_requests) {
-    int i;
     int total_movement = 0;
     int current_position = head;
-    
+    int i;
     for (i = 0; i < num_requests; i++) {
         total_movement += abs(requests[i] - current_position);
         current_position = requests[i];
