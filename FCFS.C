@@ -5,10 +5,11 @@
 
 // Function to calculate the total head movement
 int calculateTotalHeadMovement(int head, int *requests, int num_requests) {
-    int total_movement = 0;
+int i;
+int total_movement = 0;
     int current_position = head;
     
-    for (int i = 0; i < num_requests; i++) {
+    for (i = 0; i < num_requests; i++) {
         total_movement += abs(requests[i] - current_position);
         current_position = requests[i];
     }
@@ -19,7 +20,7 @@ int calculateTotalHeadMovement(int head, int *requests, int num_requests) {
 int main() {
     int head_position, num_requests;
     int request_queue[MAX_REQUESTS];
-    
+    int i;
     printf("Enter the current head position: ");
     scanf("%d", &head_position);
     
@@ -27,7 +28,7 @@ int main() {
     scanf("%d", &num_requests);
     
     printf("Enter the disk request queue: ");
-    for (int i = 0; i < num_requests; i++) {
+    for (i = 0; i < num_requests; i++) {
         scanf("%d", &request_queue[i]);
     }
     
