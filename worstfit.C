@@ -1,82 +1,72 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include <conio.h>
 
-#define MEMORY_SIZE 1000
+#define MAX_BLOCKS 10
 
-// Structure to represent a memory block
-typedef struct MemoryBlock {
-    int start_address;
-    int size;
-    int allocated;
-} MemoryBlock;
+void worstFit(int blocks[], int m, int processes[], int n) {
+    int allocation[100];
+    int i;
+    int worst_fit_index=-1;
+    int j;
+    for (i = 0; i < n; i++) {
+        // Initialize allocation for process i as -1 (indicating unallocated)
+        allocation[i] = -1;
 
-// Function to initialize memory blocks
-void initializeMemory(MemoryBlock *memory, int num_blocks) {
-    for (int i = 0; i < num_blocks; i++) {
-        memory[i].start_address = 0;
-        memory[i].size = 0;
-        memory[i].allocated = 0;
-    }
-}
+	// Find the worst fit block for current process
+	for (j = 0; j < m; j++) {
+            if (blocks[j] >= processes[i]) {
+                if (worst_fit_index == -1 || blocks[j] > blocks[worst_fit_index]) {
+                    worst_fit_index = j;
+                }
+            }
+        }
 
-// Function to display memory blocks
-void displayMemory(MemoryBlock *memory, int num_blocks) {
-    printf("Memory Blocks:\n");
-    printf("Start Address | Size | Allocated\n");
-    for (int i = 0; i < num_blocks; i++) {
-        printf("%14d | %4d | %9s\n", memory[i].start_address, memory[i].size, memory[i].allocated ? "Yes" : "No");
-    }
-}
-
-// Function to allocate memory using worst fit strategy
-void allocateMemoryWorstFit(MemoryBlock *memory, int num_blocks, int request_size) {
-    int worst_fit_index = -1;
-    int max_size = 0;
-    
-    // Find the largest available block
-    for (int i = 0; i < num_blocks; i++) {
-        if (!memory[i].allocated && memory[i].size >= request_size && memory[i].size > max_size) {
-            worst_fit_index = i;
-            max_size = memory[i].size;
+        // Allocate process i to the worst fit block
+        if (worst_fit_index != -1) {
+            allocation[i] = worst_fit_index;
+            blocks[worst_fit_index] -= processes[i];
         }
     }
-    
-    // Allocate memory if a block is found
-    if (worst_fit_index != -1) {
-        memory[worst_fit_index].allocated = 1;
-        printf("Memory allocated at address %d for request of size %d\n", memory[worst_fit_index].start_address, request_size);
-    } else {
-        printf("Memory allocation failed for request of size %d\n", request_size);
+
+    // Print the allocation
+    printf("Process No.\tProcess Size\tBlock No.\n");
+    for (i = 0; i < n; i++) {
+        printf("%d\t\t%d\t\t", i+1, processes[i]);
+        if (allocation[i] != -1) {
+            printf("%d\n", allocation[i] + 1);
+        } else {
+            printf("Not Allocated\n");
+        }
     }
 }
 
 int main() {
-    MemoryBlock memory[MEMORY_SIZE];
-    int num_blocks, request_size;
-
-    // Initialize memory
+    int blocks[MAX_BLOCKS], processes[MAX_BLOCKS];
+    int m, n;
+    int i;
+    // Input the number of memory blocks
     printf("Enter the number of memory blocks: ");
-    scanf("%d", &num_blocks);
-    initializeMemory(memory, num_blocks);
+    scanf("%d", &m);
 
-    // Input memory blocks
-    printf("Enter the memory blocks:\n");
-    for (int i = 0; i < num_blocks; i++) {
-        printf("Block %d: ", i + 1);
-        scanf("%d", &memory[i].size);
-        memory[i].start_address = i * 100; // Assuming block size is multiple of 100 for simplicity
+    // Input the sizes of memory blocks
+    printf("Enter the sizes of memory blocks:\n");
+    for (i = 0; i < m; i++) {
+	scanf("%d", &blocks[i]);
     }
 
-    // Display initial memory state
-    displayMemory(memory, num_blocks);
+    // Input the number of processes
+    printf("Enter the number of processes: ");
+    scanf("%d", &n);
 
-    // Allocate memory using worst fit strategy
-    printf("\nEnter the size of memory request: ");
-    scanf("%d", &request_size);
-    allocateMemoryWorstFit(memory, num_blocks, request_size);
+    // Input the sizes of processes
+    printf("Enter the sizes of processes:\n");
+    for (i = 0; i < n; i++) {
+	scanf("%d", &processes[i]);
+    }
 
-    // Display memory state after allocation
-    displayMemory(memory, num_blocks);
+    // Call the worst fit memory allocation function
+    worstFit(blocks, m, processes, n);
 
+    getch(); // Waits for a key press before exiting
     return 0;
 }
